@@ -315,7 +315,7 @@ function Feedbackreceive() {
                 </a>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
