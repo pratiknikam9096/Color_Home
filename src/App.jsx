@@ -9,6 +9,7 @@ import Projects from './pages/Projects'
 import Contact from './pages/Contact'
 import Feedbacks from './pages/Feedbacks'
 import ColorPicker from './pages/ColorPicker'
+import AnubhavPathri from './pages/AnubhavPathri'
 
 function App() {
   return (
@@ -20,9 +21,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/Feedback" element={<Feedbacks />} />
           <Route path="/color-picker" element={<ColorPicker />} />
           <Route path="/Feedbackreceive" element={<Feedbackreceive/>}/>
+          <Route path="/anubhav" element={<AnubhavPathri />} />
         </Routes>
       </main>
       <Footer />
