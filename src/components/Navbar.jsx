@@ -10,7 +10,7 @@ function Navbar() {
     { name: 'About', path: '/about' },
     { name: 'Projects', path: '/projects' },
     { name: 'Contact', path: '/contact' },
-    { name: 'Feedback', path: '/feedback' },
+    { name: 'Feedback', path: '/Feedback' },
     { name: 'Color Picker', path: '/color-picker' },
   ]
 
