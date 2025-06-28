@@ -2,8 +2,13 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 class GeminiService {
   constructor() {
-    // Use the API key directly for testing
-    this.apiKey = 'AIzaSyBMAScoJf9JnFbLMMfsDkhMoEaejnS9CZM';
+    // Use environment variable for API key
+    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    
+    if (!this.apiKey) {
+      console.error('❌ Gemini API key not found. Please set VITE_GEMINI_API_KEY in your .env file');
+      return;
+    }
     
     try {
       this.genAI = new GoogleGenerativeAI(this.apiKey);
