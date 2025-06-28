@@ -291,17 +291,17 @@ function ColorPicker() {
             transition={{ delay: 0.4 }}
             className="lg:col-span-1"
           >
-            <div className="bg-white rounded-2xl shadow-xl p-6">
+            <div className="bg-white rounded-2xl shadow-xl p-6 h-full">
               <h2 className="text-xl font-bold mb-4 flex items-center text-gray-800">
                 <Heart className="mr-2 text-pink-500" size={20} />
                 Saved Colors ({favoriteColors.length})
               </h2>
               
               {favoriteColors.length === 0 ? (
-                <div className="text-center py-8">
-                  <div className="text-4xl mb-3">🎨</div>
-                  <p className="text-gray-500">No saved colors yet</p>
-                  <p className="text-sm text-gray-400 mt-1">Save colors you like!</p>
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">🎨</div>
+                  <p className="text-gray-500 text-lg font-semibold">No saved colors yet</p>
+                  <p className="text-sm text-gray-400 mt-2">Save colors you like!</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-3 max-h-96 overflow-y-auto">
@@ -324,33 +324,6 @@ function ColorPicker() {
                 </div>
               )}
             </div>
-
-            {/* Contact CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white text-center shadow-xl"
-            >
-              <h3 className="text-lg font-bold mb-2">Love this color?</h3>
-              <p className="mb-4 opacity-90">Get expert advice from Pratik</p>
-              <div className="space-y-2">
-                <a
-                  href="tel:9096457620"
-                  className="block bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  📞 Call: 9096457620
-                </a>
-                <a
-                  href="https://wa.me/919096457620"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors"
-                >
-                  💬 WhatsApp
-                </a>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>
