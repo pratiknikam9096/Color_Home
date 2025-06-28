@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 
 function Feedbackreceive() {
-  const API_BASE_URL =  'http://localhost:5001';
-
   const [formData, setFormData] = useState({
     name: '',
     rating: 5,
@@ -76,7 +74,7 @@ function Feedbackreceive() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/feedback`, {
+      const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
