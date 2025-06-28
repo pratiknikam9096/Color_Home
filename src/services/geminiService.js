@@ -2,9 +2,16 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 class GeminiService {
   constructor() {
-    this.apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    this.genAI = new GoogleGenerativeAI(this.apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Use the API key directly for testing
+    this.apiKey = 'AIzaSyBMAScoJf9JnFbLMMfsDkhMoEaejnS9CZM';
+    
+    try {
+      this.genAI = new GoogleGenerativeAI(this.apiKey);
+      this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      console.log('✅ Gemini AI initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize Gemini AI:', error);
+    }
     
     // System prompt to define the AI's role and knowledge
     this.systemPrompt = `You are Pratik's AI assistant for Divya Colour Home, a paint shop located in Yakatput Road, Ausa, Latur, Maharashtra 413520. 
@@ -61,6 +68,10 @@ Remember: You represent a local, family-owned paint business that values quality
 
   async generateResponse(userMessage, conversationHistory = []) {
     try {
+      if (!this.model) {
+        throw new Error('Gemini AI not properly initialized');
+      }
+
       // Build conversation context
       let conversationContext = this.systemPrompt + "\n\nCONVERSATION HISTORY:\n";
       
@@ -72,18 +83,36 @@ Remember: You represent a local, family-owned paint business that values quality
       
       conversationContext += `\nCustomer: ${userMessage}\nAssistant:`;
 
+      console.log('🤖 Sending request to Gemini AI...');
       const result = await this.model.generateContent(conversationContext);
       const response = await result.response;
-      return response.text();
+      const text = response.text();
+      console.log('✅ Received response from Gemini AI');
+      return text;
     } catch (error) {
-      console.error('Gemini API Error:', error);
+      console.error('❌ Gemini API Error:', error);
       
-      // Fallback responses for common scenarios
-      if (error.message?.includes('API key')) {
-        return "I'm having trouble connecting to my AI brain right now. Please call Pratik directly at 9096457620 for immediate assistance with your paint needs!";
+      // Enhanced fallback responses based on user message content
+      const lowerMessage = userMessage.toLowerCase();
+      
+      if (lowerMessage.includes('paint') && lowerMessage.includes('room')) {
+        return "For room-specific paint recommendations, I'd suggest speaking with Pratik directly at 9096457620. He has extensive experience helping customers choose the perfect paint for every room in their home. Visit our shop at Yakatput Road, Ausa for personalized consultation!";
       }
       
-      return "I'm experiencing some technical difficulties. For immediate help with paint recommendations or services, please contact Pratik at 9096457620 or visit our shop at Yakatput Road, Ausa, Latur.";
+      if (lowerMessage.includes('color') || lowerMessage.includes('colour')) {
+        return "Color selection is one of our specialties! Pratik can help you choose the perfect color combinations for your space. Call 9096457620 or visit Divya Colour Home for expert color consultation and see our extensive color palette!";
+      }
+      
+      if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+        return "For accurate pricing on paints and services, please contact Pratik at 9096457620. Prices vary based on paint type, quantity, and specific requirements. We offer competitive rates and quality products!";
+      }
+      
+      if (lowerMessage.includes('book') || lowerMessage.includes('appointment')) {
+        return "To book a consultation or painting service, please call Pratik directly at 9096457620. He'll be happy to schedule a convenient time to discuss your paint needs and provide expert guidance!";
+      }
+      
+      // Generic fallback
+      return "I'm having some technical difficulties right now, but Pratik is always available to help! Call him at 9096457620 for immediate assistance with your paint needs, or visit Divya Colour Home at Yakatput Road, Ausa, Latur. He's the expert who can solve any paint challenge! 🎨";
     }
   }
 

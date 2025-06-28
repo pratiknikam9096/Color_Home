@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, User, Bot, Loader2, Sparkles, Palette, Home, Phone } from 'lucide-react';
+import { MessageCircle, X, Send, User, Bot, Sparkles, Palette, Home, Phone } from 'lucide-react';
 import geminiService from '../services/geminiService';
 
 function Chatbot() {
@@ -149,17 +149,18 @@ function Chatbot() {
   };
 
   return (
-    <>
+    <div className="fixed bottom-0 right-0 z-50">
       {/* Enhanced Chat Toggle Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 ${
+        className={`fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 ${
           isOpen 
             ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700' 
             : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
         } text-white relative overflow-hidden`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        style={{ zIndex: 9999 }}
       >
         {/* Sparkle effect */}
         <motion.div
@@ -195,7 +196,8 @@ function Chatbot() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-40 w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+            style={{ zIndex: 9998 }}
           >
             {/* Enhanced Header */}
             <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 text-white p-4 relative overflow-hidden">
@@ -372,7 +374,7 @@ function Chatbot() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
 
