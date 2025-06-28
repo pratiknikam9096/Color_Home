@@ -22,7 +22,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/color-picker" element={<ColorPicker />} />
-          <Route path="/Feedbackreceive" element={<Feedbackreceive/>}/>
+          <Route path="/Feedback" element={<Feedbackreceive/>}/>
           <Route path="/anubhav" element={<AnubhavPathri />} />
         </Routes>
       </main>
