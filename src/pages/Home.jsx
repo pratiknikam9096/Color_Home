@@ -1,49 +1,16 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import video from '../assets/v1.mp4';
 
 function Home() {
-  const [showPopup, setShowPopup] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(false);
-    }, 150000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Main services except the new one
-  const mainServices = [
+  // Services offered
+  const services = [
     { title: 'Interior Paints', icon: '🏠', link: '/Projects' },
     { title: 'Exterior Paints', icon: '🏢', link: '/Projects' },
     { title: 'Texture Finishes', icon: '🎨', link: '/Projects' },
   ];
 
-  // New "Paint for Sell" service
-  const specialService = { title: 'Paint for Sell', icon: '🖌️', link: '/Projects' };
-
   return (
     <div className="min-h-screen relative">
-      {/* 🔹 Corner Video Ad */}
-      {showPopup && (
-        <div className="fixed bottom-4 right-4 z-40 w-[280px] rounded-xl shadow-lg bg-white overflow-hidden">
-          <button
-            onClick={() => setShowPopup(false)}
-            className="absolute top-1 right-1 z-50 bg-red-500 text-white rounded-full px-2 py-1 text-sm"
-          >
-            ✕
-          </button>
-          <video
-            src={video}
-            autoPlay
-            muted
-            controls
-            className="w-full h-[160px] object-cover"
-          />
-        </div>
-      )}
-
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -97,9 +64,9 @@ function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
 
-          {/* Grid for main services */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {mainServices.map((service, index) => (
+          {/* Grid for services */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
               <motion.div
                 key={service.title}
                 initial={{ y: 20, opacity: 0 }}
@@ -118,23 +85,6 @@ function Home() {
               </motion.div>
             ))}
           </div>
-
-          {/* Special service pinned below */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center"
-          >
-            <div className="text-5xl mb-6">{specialService.icon}</div>
-            <h3 className="text-2xl font-bold mb-4">{specialService.title}</h3>
-            <Link
-              to={specialService.link}
-              className="text-primary-700 font-semibold hover:text-primary-900"
-            >
-              Learn More →
-            </Link>
-          </motion.div>
         </div>
       </section>
     </div>
