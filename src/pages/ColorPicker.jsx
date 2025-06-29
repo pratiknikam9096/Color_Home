@@ -42,12 +42,6 @@ function ColorPicker() {
       image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop',
       description: 'Peaceful and restful sleeping space',
       coverage: 125 // sq ft per liter
-    },
-    bathroom: {
-      name: 'Bathroom',
-      image: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=800&h=600&fit=crop',
-      description: 'Fresh and clean personal space',
-      coverage: 100 // sq ft per liter (bathroom needs special paint)
     }
   }
 
