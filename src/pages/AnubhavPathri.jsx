@@ -50,7 +50,7 @@ function AnubhavPathri() {
     
     // Validation
     if (!formData.name.trim() || !formData.message.trim()) {
-      alert('कृपया सर्व फील्ड भरा! (Please fill all fields!)');
+      alert('Please fill all fields!');
       return;
     }
 
@@ -120,11 +120,11 @@ function AnubhavPathri() {
         >
           <div className="flex items-center justify-center mb-4">
             <Flower className="text-orange-500 mr-2" size={32} />
-            <h1 className="text-4xl font-bold text-orange-800">अनुभव पत्री</h1>
+            <h1 className="text-4xl font-bold text-orange-800">Experience Book</h1>
             <Flower className="text-orange-500 ml-2" size={32} />
           </div>
-          <p className="text-xl text-orange-700 mb-2">नमस्कार! आपला अनुभव आमच्यासोबत शेअर करा</p>
-          <p className="text-lg text-gray-600">Namaskar! Share your experience with us</p>
+          <p className="text-xl text-orange-700 mb-2">Hello! Share your experience with us</p>
+          <p className="text-lg text-gray-600">Tell us about your journey with Divya Colour Home</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -136,21 +136,21 @@ function AnubhavPathri() {
             className="bg-white rounded-2xl shadow-lg p-8 border-2 border-orange-100"
           >
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-orange-800 mb-2">आपला अनुभव लिहा</h2>
-              <p className="text-gray-600">Write Your Experience</p>
+              <h2 className="text-2xl font-bold text-orange-800 mb-2">Write Your Experience</h2>
+              <p className="text-gray-600">Share your thoughts and feedback</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-orange-700 mb-2">
-                  नाव / Name *
+                  Name *
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="आपले नाव लिहा..."
+                  placeholder="Enter your name..."
                   className="w-full px-4 py-3 border-2 border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
                   required
                 />
@@ -158,7 +158,7 @@ function AnubhavPathri() {
 
               <div>
                 <label className="block text-sm font-medium text-orange-700 mb-2">
-                  रेटिंग / Rating *
+                  Rating *
                 </label>
                 <div className="flex items-center space-x-2">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -180,20 +180,20 @@ function AnubhavPathri() {
                     </button>
                   ))}
                   <span className="ml-3 text-orange-700 font-medium">
-                    {formData.rating} {formData.rating === 1 ? 'तारा' : 'तारे'}
+                    {formData.rating} {formData.rating === 1 ? 'Star' : 'Stars'}
                   </span>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-orange-700 mb-2">
-                  संदेश / Message *
+                  Message *
                 </label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  placeholder="आपला अनुभव आमच्यासोबत शेअर करा..."
+                  placeholder="Share your experience with us..."
                   rows={4}
                   className="w-full px-4 py-3 border-2 border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none"
                   required
@@ -212,10 +212,10 @@ function AnubhavPathri() {
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    सबमिट करत आहे...
+                    Submitting...
                   </span>
                 ) : (
-                  '🙏 अनुभव शेअर करा / Submit Experience'
+                  '🙏 Share Experience / Submit'
                 )}
               </motion.button>
             </form>
@@ -238,12 +238,12 @@ function AnubhavPathri() {
                     onChange={(e) => setFilterRating(e.target.value)}
                     className="px-3 py-2 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500"
                   >
-                    <option value="all">सर्व रेटिंग / All Ratings</option>
-                    <option value="5">5 तारे / 5 Stars</option>
-                    <option value="4">4 तारे / 4 Stars</option>
-                    <option value="3">3 तारे / 3 Stars</option>
-                    <option value="2">2 तारे / 2 Stars</option>
-                    <option value="1">1 तारा / 1 Star</option>
+                    <option value="all">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
                   </select>
                 </div>
 
@@ -253,13 +253,13 @@ function AnubhavPathri() {
                     className="flex items-center space-x-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
                   >
                     <Trash2 size={16} />
-                    <span>सर्व साफ करा / Clear All</span>
+                    <span>Clear All</span>
                   </button>
                 )}
               </div>
 
               <div className="mt-3 text-sm text-gray-600">
-                एकूण अनुभव: {feedbacks.length} | दाखवत आहे: {filteredFeedbacks.length}
+                Total Experiences: {feedbacks.length} | Showing: {filteredFeedbacks.length}
               </div>
             </div>
 
@@ -275,8 +275,8 @@ function AnubhavPathri() {
                     <Flower className="mx-auto text-orange-300 mb-4" size={48} />
                     <p className="text-gray-500 text-lg">
                       {filterRating === 'all' 
-                        ? 'अजून कोणताही अनुभव नाही / No experiences yet' 
-                        : 'या रेटिंगसाठी अनुभव नाही / No experiences for this rating'
+                        ? 'No experiences yet' 
+                        : 'No experiences for this rating'
                       }
                     </p>
                   </motion.div>
@@ -341,10 +341,8 @@ function AnubhavPathri() {
                 className="bg-white rounded-xl p-6 max-w-md mx-4 shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
-                <h3 className="text-xl font-bold text-red-800 mb-4">खात्री करा / Confirm</h3>
+                <h3 className="text-xl font-bold text-red-800 mb-4">Confirm Action</h3>
                 <p className="text-gray-700 mb-6">
-                  तुम्हाला खरोखर सर्व अनुभव साफ करायचे आहेत का? हे कृती पूर्ववत करता येणार नाही.
-                  <br /><br />
                   Are you sure you want to clear all experiences? This action cannot be undone.
                 </p>
                 <div className="flex space-x-4">
@@ -352,13 +350,13 @@ function AnubhavPathri() {
                     onClick={() => setShowClearConfirm(false)}
                     className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
                   >
-                    रद्द करा / Cancel
+                    Cancel
                   </button>
                   <button
                     onClick={clearAllFeedbacks}
                     className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                   >
-                    साफ करा / Clear All
+                    Clear All
                   </button>
                 </div>
               </motion.div>

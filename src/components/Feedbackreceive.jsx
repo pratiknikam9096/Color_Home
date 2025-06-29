@@ -16,9 +16,9 @@ function Feedbackreceive() {
   const sampleFeedbacks = [
     {
       id: 1,
-      name: "राहुल शर्मा",
+      name: "Rahul Sharma",
       rating: 5,
-      comment: "Divya Colour Home ने माझ्या घराचे रंगकाम अप्रतिम केले आहे! प्रतिकजी खूप चांगले सल्ला देतात आणि quality खूप चांगली आहे. Highly recommended!",
+      comment: "Divya Colour Home did an amazing job painting our house! Pratik sir gives excellent advice and the quality is outstanding. Highly recommended!",
       date: new Date('2024-01-15'),
       avatar: "🏠"
     },
@@ -32,7 +32,7 @@ function Feedbackreceive() {
     },
     {
       id: 3,
-      name: "संजय कुलकर्णी",
+      name: "Sanjay Kulkarni",
       rating: 4,
       comment: "Good quality paints and reasonable prices. Pratik sir is very knowledgeable about different paint types. Will definitely come back for future projects.",
       date: new Date('2024-01-10'),
@@ -48,7 +48,7 @@ function Feedbackreceive() {
     },
     {
       id: 5,
-      name: "विकास जाधव",
+      name: "Vikas Jadhav",
       rating: 5,
       comment: "Best paint shop in Ausa! Pratik bhai gave us great advice for exterior painting. The weather-resistant paint is working perfectly even after monsoon. Highly recommended!",
       date: new Date('2024-01-05'),
