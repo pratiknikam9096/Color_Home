@@ -253,9 +253,9 @@ function ColorPicker() {
                 </div>
               </div>
 
-              {/* Color Information Panel */}
+              {/* Color Information Panel - Simplified */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                   <div className="text-center">
                     <div 
                       className="w-16 h-16 rounded-full mx-auto mb-2 border-4 border-white shadow-lg"
@@ -267,13 +267,6 @@ function ColorPicker() {
                     <div className="text-xs text-gray-600 mb-1">RGB Values</div>
                     <div className="font-mono text-sm text-gray-800">
                       {parseInt(selectedColor.slice(1, 3), 16)}, {parseInt(selectedColor.slice(3, 5), 16)}, {parseInt(selectedColor.slice(5, 7), 16)}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs text-gray-600 mb-1">HSL Values</div>
-                    <div className="font-mono text-sm text-gray-800">
-                      {/* Convert hex to HSL for display */}
-                      HSL Values
                     </div>
                   </div>
                 </div>
