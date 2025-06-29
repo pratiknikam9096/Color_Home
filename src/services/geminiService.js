@@ -7,15 +7,25 @@ class GeminiService {
     
     if (!this.apiKey) {
       console.error('❌ Gemini API key not found. Please set VITE_GEMINI_API_KEY in your .env file');
+      this.initialized = false;
+      return;
+    }
+    
+    // Validate API key format (should start with AIza)
+    if (!this.apiKey.startsWith('AIza')) {
+      console.error('❌ Invalid Gemini API key format. API key should start with "AIza"');
+      this.initialized = false;
       return;
     }
     
     try {
       this.genAI = new GoogleGenerativeAI(this.apiKey);
       this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      this.initialized = true;
       console.log('✅ Gemini AI initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize Gemini AI:', error);
+      this.initialized = false;
     }
     
     // System prompt to define the AI's role and knowledge
@@ -73,8 +83,9 @@ Remember: You represent a local, family-owned paint business that values quality
 
   async generateResponse(userMessage, conversationHistory = []) {
     try {
-      if (!this.model) {
-        throw new Error('Gemini AI not properly initialized');
+      // Check if service is properly initialized
+      if (!this.initialized || !this.model) {
+        throw new Error('Gemini AI service not properly initialized. Please check your API key.');
       }
 
       // Build conversation context
@@ -89,16 +100,54 @@ Remember: You represent a local, family-owned paint business that values quality
       conversationContext += `\nCustomer: ${userMessage}\nAssistant:`;
 
       console.log('🤖 Sending request to Gemini AI...');
-      const result = await this.model.generateContent(conversationContext);
-      const response = await result.response;
-      const text = response.text();
-      console.log('✅ Received response from Gemini AI');
-      return text;
+      
+      // Add timeout and better error handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      try {
+        const result = await this.model.generateContent(conversationContext);
+        clearTimeout(timeoutId);
+        
+        const response = await result.response;
+        const text = response.text();
+        console.log('✅ Received response from Gemini AI');
+        return text;
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        
+        // Handle specific error types
+        if (fetchError.name === 'AbortError') {
+          throw new Error('Request timeout - please try again');
+        }
+        
+        if (fetchError.message.includes('Failed to fetch')) {
+          throw new Error('Network connection failed. Please check your internet connection and try again.');
+        }
+        
+        if (fetchError.message.includes('API_KEY_INVALID')) {
+          throw new Error('Invalid API key. Please check your Gemini API key configuration.');
+        }
+        
+        if (fetchError.message.includes('PERMISSION_DENIED')) {
+          throw new Error('API key does not have permission to access Gemini API.');
+        }
+        
+        throw fetchError;
+      }
+      
     } catch (error) {
       console.error('❌ Gemini API Error:', error);
       
       // Enhanced fallback responses based on user message content
       const lowerMessage = userMessage.toLowerCase();
+      
+      // Provide specific error message if it's an API configuration issue
+      if (error.message.includes('not properly initialized') || 
+          error.message.includes('Invalid API key') || 
+          error.message.includes('PERMISSION_DENIED')) {
+        return `I'm experiencing some technical difficulties with my AI connection. This might be due to API configuration issues. Please contact Pratik directly at 9096457620 for immediate assistance with your paint needs, or visit Divya Colour Home at Yakatput Road, Ausa, Latur. He's always ready to help! 🎨`;
+      }
       
       if (lowerMessage.includes('paint') && lowerMessage.includes('room')) {
         return "For room-specific paint recommendations, I'd suggest speaking with Pratik directly at 9096457620. He has extensive experience helping customers choose the perfect paint for every room in their home. Visit our shop at Yakatput Road, Ausa for personalized consultation!";
@@ -116,9 +165,33 @@ Remember: You represent a local, family-owned paint business that values quality
         return "To book a consultation or painting service, please call Pratik directly at 9096457620. He'll be happy to schedule a convenient time to discuss your paint needs and provide expert guidance!";
       }
       
+      // Generic fallback with error context
+      if (error.message.includes('Network connection failed')) {
+        return "I'm having connectivity issues right now. While I sort this out, Pratik is available at 9096457620 for immediate help with your paint questions. Visit Divya Colour Home at Yakatput Road, Ausa, Latur for expert guidance! 🎨";
+      }
+      
       // Generic fallback
       return "I'm having some technical difficulties right now, but Pratik is always available to help! Call him at 9096457620 for immediate assistance with your paint needs, or visit Divya Colour Home at Yakatput Road, Ausa, Latur. He's the expert who can solve any paint challenge! 🎨";
     }
+  }
+
+  // Method to check if service is ready
+  isReady() {
+    return this.initialized && this.model;
+  }
+
+  // Method to get service status
+  getStatus() {
+    if (!this.apiKey) {
+      return { ready: false, error: 'API key not configured' };
+    }
+    if (!this.apiKey.startsWith('AIza')) {
+      return { ready: false, error: 'Invalid API key format' };
+    }
+    if (!this.initialized) {
+      return { ready: false, error: 'Service not initialized' };
+    }
+    return { ready: true, error: null };
   }
 
   // Specialized methods for different types of queries
