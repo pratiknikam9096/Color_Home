@@ -1,21 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const serverless = require('serverless-http');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Replace myDatabaseName with your actual DB name if you want, or leave it empty to use default
-const mongoURI = "mongodb+srv://nikampratik2989:DhSr2nePHaA8Znkt@cluster0.m8wc0ad.mongodb.net/myDatabaseName?retryWrites=true&w=majority&appName=Cluster0";
+// ---------------- MongoDB Connection ----------------
+const mongoURI = "mongodb+srv://nikampratik2989_db_user:xUoVydVIr83BWXjX@cluster0.pdatrvh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 let isConnected = false;
 
 const feedbackSchema = new mongoose.Schema({
-  name: String,
-  rating: Number,
-  comment: String,
+  name: { type: String, required: true },
+  rating: { type: Number, required: true },
+  comment: { type: String, required: true },
   date: { type: Date, default: Date.now }
 });
 
@@ -29,7 +28,9 @@ async function connectDB() {
   }
 }
 
-// Routes
+// ---------------- Routes ----------------
+
+// Get feedbacks (most recent first, optional limit)
 app.get('/api/feedback', async (req, res) => {
   try {
     await connectDB();
@@ -37,10 +38,12 @@ app.get('/api/feedback', async (req, res) => {
     const feedbacks = await Feedback.find().sort({ date: -1 }).limit(limit);
     res.json(feedbacks);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to fetch feedbacks' });
   }
 });
 
+// Post new feedback
 app.post('/api/feedback', async (req, res) => {
   try {
     await connectDB();
@@ -54,25 +57,19 @@ app.post('/api/feedback', async (req, res) => {
     const savedFeedback = await newFeedback.save();
     res.status(201).json(savedFeedback);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Server error while saving feedback' });
   }
 });
 
-// Start server after DB connection
-async function startServer() {
+// ---------------- Start Server ----------------
+const PORT = process.env.PORT || 5001;
+
+app.listen(PORT, async () => {
   try {
     await connectDB();
-    const PORT = process.env.PORT || 5001;
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('❌ Failed to connect to MongoDB:', error);
-    process.exit(1);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  } catch (err) {
+    console.error("❌ Failed to connect to MongoDB:", err);
   }
-}
-
-startServer();
-
-module.exports = app;
-module.exports.handler = serverless(app);
+});

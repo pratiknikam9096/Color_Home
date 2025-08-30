@@ -9,7 +9,6 @@ interface Feedback {
   rating: number;
   comment: string;
   date: Date;
-  avatar: string;
 }
 
 interface FormData {
@@ -26,38 +25,35 @@ function FeedbackCard({ feedback }: { feedback: Feedback }) {
       animate={{ opacity: 1, y: 0 }}
       className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow"
     >
-      <div className="flex items-start space-x-4">
-        <div className="text-3xl">{feedback.avatar}</div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="font-bold text-gray-800 text-lg">{feedback.name}</h4>
-            <span className="text-sm text-gray-500">
-              {new Date(feedback.date).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </span>
-          </div>
+      <div className="flex-1">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="font-bold text-gray-800 text-lg">{feedback.name}</h4>
+          <span className="text-sm text-gray-500">
+            {feedback.date
+              ? new Date(feedback.date).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "No date"}
+          </span>
+        </div>
 
-          <div className="flex items-center mb-3">
+        <div className="flex items-center mb-3">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
+                fill={star <= feedback.rating ? "currentColor" : "none"} // fill if rating
                 className={`w-4 h-4 ${
-                  star <= feedback.rating
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300"
+                  star <= feedback.rating ? "text-yellow-400" : "text-gray-300"
                 }`}
               />
             ))}
-            <span className="ml-2 text-sm text-gray-600">
-              ({feedback.rating}/5)
-            </span>
-          </div>
 
-          <p className="text-gray-700 leading-relaxed">{feedback.comment}</p>
+          <span className="ml-2 text-sm text-gray-600">({feedback.rating}/5)</span>
         </div>
+
+        <p className="text-gray-700 leading-relaxed">{feedback.comment}</p>
       </div>
     </motion.div>
   );
@@ -92,7 +88,9 @@ function FeedbackForm({
 }) {
   const [hoverRating, setHoverRating] = useState(0);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -225,73 +223,47 @@ export default function FeedbackReceive() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
-  // ---------------- Sample Real Feedbacks ----------------
+  // ---------------- Sample Feedbacks ----------------
   const sampleFeedbacks: Feedback[] = [
     {
       id: 1,
       name: "Rahul Sharma",
       rating: 5,
       comment:
-        "Divya Colour Home did an amazing job painting our house! Pratik sir gives excellent advice and the quality is outstanding. Highly recommended!",
+        "The team did an excellent job painting our house. The color consultation was very helpful, and the finish is outstanding. Highly recommended!",
       date: new Date("2024-01-15"),
-      avatar: "🏠",
     },
     {
       id: 2,
       name: "Priya Patil",
       rating: 5,
       comment:
-        "Amazing service! Pratik bhai helped us choose perfect colors for our new home. The paint quality is excellent and the finish is beautiful.",
+        "Amazing service! They helped us choose the perfect shades for our new home. The paint quality is excellent and the final look is beautiful.",
       date: new Date("2024-01-12"),
-      avatar: "🎨",
     },
     {
       id: 3,
       name: "Sanjay Kulkarni",
       rating: 4,
       comment:
-        "Good quality paints and reasonable prices. Pratik sir is very knowledgeable about different paint types. Will definitely come back.",
+        "Good quality paints at reasonable prices. The staff is knowledgeable and guided us well about different paint types. Will definitely return.",
       date: new Date("2024-01-10"),
-      avatar: "👨‍🔧",
-    },
-    {
-      id: 4,
-      name: "Anita Deshmukh",
-      rating: 5,
-      comment:
-        "Excellent customer service! They helped me select waterproof paint for bathroom and kitchen. The colors are vibrant and long-lasting.",
-      date: new Date("2024-01-08"),
-      avatar: "🌈",
-    },
-    {
-      id: 5,
-      name: "Vikas Jadhav",
-      rating: 5,
-      comment:
-        "Best paint shop in Ausa! Pratik bhai gave us great advice for exterior painting. The weather-resistant paint is working perfectly even after monsoon.",
-      date: new Date("2024-01-05"),
-      avatar: "🏡",
-    },
-    {
-      id: 6,
-      name: "Meena Rathi",
-      rating: 4,
-      comment:
-        "Very professional service. They explained the difference between paints clearly and suggested the right shades for my living room. Happy with results!",
-      date: new Date("2024-01-03"),
-      avatar: "🛋️",
     },
   ];
 
-  // ---------------- Handle Submit ----------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage("");
 
     try {
-      // Mock API Call
-      await new Promise((res) => setTimeout(res, 1500));
+      // Send to backend
+      const res = await fetch("http://localhost:5001/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to submit feedback");
 
       setMessage("Feedback submitted successfully!");
       setFormData({ name: "", rating: 5, comment: "" });
@@ -312,12 +284,8 @@ export default function FeedbackReceive() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Customer Feedback
-          </h1>
-          <p className="text-xl text-gray-600">
-            Share your experience with Divya Colour Home
-          </p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">Customer Feedback</h1>
+          <p className="text-xl text-gray-600">Share your experience with our services</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -330,7 +298,7 @@ export default function FeedbackReceive() {
             setFormData={setFormData}
           />
 
-          {/* Feedback Section */}
+          {/* Feedback List */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -341,41 +309,9 @@ export default function FeedbackReceive() {
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                 🌟 Recent Customer Reviews
               </h3>
-              <p className="text-center text-gray-600 mb-6">
-                See what our customers are saying about Divya Colour Home
-              </p>
             </div>
 
             <FeedbackList feedbacks={sampleFeedbacks} />
-
-            {/* Call to Action */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white text-center"
-            >
-              <h4 className="text-xl font-bold mb-2">
-                Ready to Transform Your Space?
-              </h4>
-              <p className="mb-4">Contact Pratik for expert paint consultation</p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href="tel:9096457620"
-                  className="bg-white text-blue-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                >
-                  📞 Call: 9096457620
-                </a>
-                <a
-                  href="https://wa.me/919096457620"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors"
-                >
-                  💬 WhatsApp
-                </a>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

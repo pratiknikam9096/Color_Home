@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
@@ -37,6 +37,11 @@ function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link to="/feedback" className="text-gray-400 hover:text-white">
+                  Feedback
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
@@ -46,29 +51,21 @@ function Footer() {
             </p>
             <p className="text-gray-400">
               Email:{' '}
-              <a
-                href="mailto:nikampratik2989@gmail.com"
-                className="hover:text-white"
-              >
+              <a href="mailto:nikampratik2989@gmail.com" className="hover:text-white">
                 nikampratik2989@gmail.com
               </a>
             </p>
           </div>
         </div>
-        <div>
-      <Link to='/Feedbackreceive' className="text-gray-400 hover:text-white">
-                  Feedback
-                </Link>
-     </div>
+
         <div className="mt-8 pt-8 border-t border-gray-800 text-center">
           <p className="text-gray-400">
             © {new Date().getFullYear()} Divya Colour Home. All rights reserved.
           </p>
         </div>
       </div>
-     
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

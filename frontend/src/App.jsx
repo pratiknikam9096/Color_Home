@@ -7,9 +7,8 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Projects from './pages/Projects'
 import Contact from './pages/Contact'
-import Feedbacks from './pages/Feedbacks'
 import ColorPicker from './pages/ColorPicker'
-import AnubhavPathri from './pages/AnubhavPathri'
+
 
 function App() {
   return (
@@ -23,7 +22,6 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/color-picker" element={<ColorPicker />} />
           <Route path="/Feedback" element={<Feedbackreceive/>}/>
-          <Route path="/anubhav" element={<AnubhavPathri />} />
         </Routes>
       </main>
       <Footer />

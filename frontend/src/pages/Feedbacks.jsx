@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -7,12 +7,15 @@ const Feedbacks = () => {
   const [error, setError] = useState(null);
 
   const fetchFeedbacks = async () => {
+    setLoading(true);
+    setError(null);
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-      const response = await fetch('/api/feedback?limit=5', {
-        signal: controller.signal
+      const response = await fetch("http://localhost:5001/api/feedback?limit=6", {
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -23,11 +26,12 @@ const Feedbacks = () => {
 
       const data = await response.json();
       setFeedbacks(data);
-      setError(null);
     } catch (err) {
-      setError(err.message.includes('aborted')
-        ? 'Request timed out. Check your connection.'
-        : `Failed to load feedback: ${err.message}`);
+      if (err.name === "AbortError") {
+        setError("Request timed out. Check your connection.");
+      } else {
+        setError(`Failed to load feedback: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -57,9 +61,6 @@ const Feedbacks = () => {
         >
           Retry
         </button>
-        <p className="text-sm text-gray-500 mt-4">
-          Ensure your backend server is running on port 5001
-        </p>
       </div>
     );
   }
@@ -67,10 +68,11 @@ const Feedbacks = () => {
   return (
     <div className="max-w-5xl mx-auto my-16 px-4">
       <h2 className="text-3xl font-bold text-center mb-10 text-blue-800">What Our Users Say</h2>
+
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {feedbacks.map((fb, index) => (
           <motion.div
-            key={index}
+            key={fb._id || index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -79,15 +81,17 @@ const Feedbacks = () => {
             <h3 className="text-lg font-semibold text-gray-800">{fb.name}</h3>
 
             <div className="flex gap-1 text-yellow-500 my-1">
-              {[1, 2, 3, 4, 5].map(i => (
-                <span key={i} className={i <= fb.rating ? 'text-yellow-400' : 'text-gray-300'}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <span key={i} className={i <= fb.rating ? "text-yellow-400" : "text-gray-300"}>
                   ★
                 </span>
               ))}
             </div>
 
             <p className="text-gray-700 text-sm mb-3">"{fb.comment}"</p>
-            <p className="text-xs text-gray-400">{new Date(fb.date).toLocaleDateString('en-IN')}</p>
+            <p className="text-xs text-gray-400">
+              {fb.date ? new Date(fb.date).toLocaleDateString("en-IN") : "No date"}
+            </p>
           </motion.div>
         ))}
       </div>
