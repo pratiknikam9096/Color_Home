@@ -14,7 +14,7 @@ const Feedbacks = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-      const response = await fetch("http://localhost:5001/api/feedback?limit=6", {
+      const response = await fetch("https://divyacolor.onrender.com", {
         signal: controller.signal,
       });
 
