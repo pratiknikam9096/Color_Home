@@ -8,7 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ---------------- MongoDB Connection ----------------
 const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
