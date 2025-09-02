@@ -7,7 +7,12 @@ app.use(cors());
 app.use(express.json());
 
 // ---------------- MongoDB Connection ----------------
-const mongoURI = "mongodb+srv://nikampratik2989_db_user:xUoVydVIr83BWXjX@cluster0.pdatrvh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURI = process.env.MONGO_URI;
+
+if (!mongoURI) {
+  console.error('❌ MONGO_URI environment variable is not set');
+  process.exit(1);
+}
 
 let isConnected = false;
 
